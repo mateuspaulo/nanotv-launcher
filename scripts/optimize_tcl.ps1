@@ -20,11 +20,24 @@ Write-Host "`n[*] Conectando a $target ..." -ForegroundColor Yellow
 adb connect $target
 
 Write-Host "`n[*] Instalando NanoTV Launcher..." -ForegroundColor Yellow
-$apkPath = Join-Path $PSScriptRoot "..\releases\NanoTV-Launcher-v1.0.apk"
-if (Test-Path $apkPath) {
+$apkCandidates = @(
+    (Join-Path $PSScriptRoot "..\releases\NanoTV-Launcher-v1.1.0.apk"),
+    (Join-Path $PSScriptRoot "..\releases\NanoTV-Launcher-v1.0.apk")
+)
+$apkPath = $null
+foreach ($cand in $apkCandidates) {
+    if (Test-Path $cand) { $apkPath = $cand; break }
+}
+if (-not $apkPath) {
+    $found = Get-ChildItem -Path (Join-Path $PSScriptRoot "..\releases") -Filter "*.apk" -ErrorAction SilentlyContinue | Select-Object -First 1
+    if ($found) { $apkPath = $found.FullName }
+}
+
+if ($apkPath -and (Test-Path $apkPath)) {
+    Write-Host "[+] Instalando: $apkPath" -ForegroundColor Green
     adb -s $target install -r $apkPath
 } else {
-    Write-Warning "APK nao encontrado em $apkPath. Certifique-se de baixar o release."
+    Write-Warning "APK nao encontrado na pasta releases. Certifique-se de baixar o release."
 }
 
 Write-Host "`n[*] Definindo NanoTV como launcher padrao..." -ForegroundColor Yellow

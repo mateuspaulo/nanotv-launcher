@@ -1,9 +1,18 @@
 # NanoTV Launcher 📺⚡
-> **Launcher ultraleve, moderno e sem anúncios para Smart TVs Android (com foco especial na linha TCL / 50P8M e dispositivos de hardware modesto).**
+> **Ultra-lightweight, bloat-free & ad-free launcher for Android TV (crafted especially for TCL 50P8M, low-RAM Smart TVs and TV boxes).**  
+> *Launcher ultraleve, moderno e sem anúncios para Smart TVs Android (com foco especial na linha TCL / 50P8M e dispositivos de hardware modesto).*
 
 ![NanoTV Launcher Preview](assets/preview.png)
 
+<div align="center">
+
+**[🇧🇷 Versão em Português](#-versão-em-português)** | **[🇺🇸 English Version](#-english-version)**
+
+</div>
+
 ---
+
+# 🇧🇷 Versão em Português
 
 ## 💡 Por que este projeto existe?
 
@@ -13,23 +22,24 @@ O launcher padrão oficial do Google TV e as customizações de fábrica dessas 
 * **Google TV Launcher:** consome até **90% de CPU** em picos e mais de **250 MB de RAM**, carregando trailers de vídeo automáticos, propagandas e sincronização contínua de canais patrocinados em segundo plano.
 * **Telemetria de Fábrica:** serviços em segundo plano (como *TCL BI*, *Waterfall Ads*, *TV Guard*) competem pela CPU e causam engasgos severos, congelamentos no controle remoto e lentidão ao abrir aplicativos.
 
-O **NanoTV Launcher** foi desenvolvido em **Java/Views nativas puras (XML + RecyclerView)**, sem bibliotecas pesadas de runtime, trazendo a TV de volta à fluidez que ela deveria ter.
+O **NanoTV Launcher** foi desenvolvido em **Java e Views nativas puras (XML + RecyclerView)**, sem bibliotecas pesadas de runtime, trazendo a TV de volta à fluidez instantânea que ela deveria ter.
 
 ---
 
-## ✨ Recursos Principais
+## ✨ Recursos Principais (Versão 1.1.0)
 
 * ⚡ **0% de Uso de CPU em Repouso:** A interface é estática e instantânea, liberando os núcleos do processador para os seus filmes e vídeos.
 * 🧠 **Uso Mínimo de RAM (< 20 MB):** Redução de mais de **90%** comparado ao launcher oficial do Google.
-* 📊 **Métricas de Hardware em Tempo Real:** Exibe no topo o consumo de **RAM**, **Espaço em Disco Livre** e **Uso de CPU**. *(Pode ser ocultado a qualquer momento no menu de Configurações)*.
-* 🔌 **Indicador de Conexão com a Internet:** Identifica automaticamente se a TV está conectada via **Cabo (Ethernet)** ou **Wi-Fi** (com nome da rede). Ao clicar nele com o controle, abre diretamente a tela de conexões da TV.
+* 🚀 **Otimizador de Memória RAM Integrado no Rodapé:** Badge interativo no rodapé que mostra o consumo em tempo real de **RAM**, **Espaço em Disco** e **CPU**. Ao selecionar o badge com as setas do controle e pressionar **[OK]**, abre o menu de desempenho com a opção de **Liberar Memória RAM** (encerrando processos e serviços não essenciais em segundo plano).
+* ⚡ **Medição Real e Dinâmica de CPU:** Leitura nativa e precisa da frequência do processador (em GHz) e carga do governor via sysfs do kernel Linux, corrigindo a limitação do Android 9 Pie (SELinux) onde ferramentas convencionais ficavam travadas em 0%.
+* 🔀 **Modo Mover Fluido (Organizar com Setas):** Ao segurar [OK] e escolher "Mover Aplicativo", o card entra em destaque dourado e você pode reposicioná-lo livremente usando as setas do controle (**Cima, Baixo, Esquerda, Direita**) quantas casas quiser continuamente. Basta pressionar **[OK]** ou **[VOLTAR]** para fixar e salvar a posição para sempre.
+* 🗑️ **Desinstalação Inteligente de Aplicativos:** Suporte direto à desinstalação de apps de terceiros via tela nativa do sistema. Caso o app selecionado seja pré-instalado de fábrica (sistema), o launcher avisa e abre diretamente os Detalhes do App nas Configurações para desativar ou limpar dados.
+* 🔌 **Indicador de Conexão com a Internet:** Identifica automaticamente se a TV está conectada via **Cabo (Ethernet)** ou **Wi-Fi** (com o nome da rede). Ao clicar nele com o controle, abre diretamente a tela de conexões da TV.
 * 🛍️ **Acesso Rápido à Loja de Apps:** Botão no topo que detecta e abre diretamente a **Google Play Store** (ou loja nativa/alternativa da sua TV) em um único clique.
 * 🎛️ **Seletor Real de Entradas Físicas:** Menu limpo com as portas reais de hardware (**HDMI 1**, **HDMI 2**, **HDMI 3**, **AV** e **TV Aberta/Antena**).
-* 🔀 **Organização e Posição Salva Permanentemente:** Mova os aplicativos para onde quiser (esquerda, direita ou início). A ordem fica gravada no armazenamento interno e nunca se perde ao desligar a TV.
-* ⭐ **Linha de Favoritos:** Fixe os seus aplicativos mais usados no topo.
-* 🛠️ **Menu Completo de Gerenciamento:** Segure a tecla **[OK]** em qualquer app para favoritar, mover de posição, **desinstalar** ou **ocultar** da tela.
-* 📜 **Barra de Rolagem Proporcional e Arejada:** Indica com exatidão a quantidade real de apps fora da tela com espaçamento dedicado e elegante, sem sobrepor os aplicativos.
-* 📱 **Suporte a Apps Sideload:** Exibe todos os aplicativos instalados, inclusive aqueles que o Android TV padrão esconde por não terem banner de TV.
+* ⭐ **Linha de Favoritos:** Fixe os seus aplicativos mais usados no topo com rolagem horizontal fluida.
+* 📱 **Suporte Completo a Apps Sideload:** Exibe todos os aplicativos instalados, inclusive aqueles que o Android TV padrão esconde por não terem banner de TV.
+* 📜 **Barra de Rolagem Proporcional:** Indica com exatidão a quantidade real de apps fora da tela com espaçamento arejado, sem sobrepor os cards.
 * 🚫 **Zero Propagandas e Zero Telemetria:** Nenhuma conexão externa desnecessária.
 
 ---
@@ -42,9 +52,9 @@ Para tornar o **NanoTV Launcher a tela inicial definitiva e permanente**, utiliz
 
 ### Método 1: Automático em 1 Clique (Recomendado)
 Se você utilizar o nosso script de otimização, ele já realiza todo esse processo automaticamente sem você precisar digitar comandos:
-1. Conecte o computador e a TV na mesma rede.
+1. Conecte o computador e a TV na mesma rede local.
 2. Na pasta `scripts/`, execute **`optimize_tcl.bat`** (no Windows) ou **`optimize_tcl.ps1`** (PowerShell).
-3. Informe o IP da TV. Pronto! O NanoTV será configurado como padrão e o launcher pesado do Google será desativado.
+3. Digite o endereço IP da TV. Pronto! O NanoTV será configurado como padrão e o launcher pesado do Google será desativado.
 
 ---
 
@@ -53,7 +63,7 @@ Se você utilizar o nosso script de otimização, ele já realiza todo esse proc
 Se preferir fazer diretamente pelo terminal:
 
 ```bash
-# 1. Conectar na TV via ADB
+# 1. Conectar na TV via ADB (substitua pelo IP da sua TV)
 adb connect SEU_IP_AQUI:5555
 
 # 2. Definir o NanoTV como o Launcher padrão oficial do sistema
@@ -81,15 +91,13 @@ adb shell input keyevent KEYCODE_HOME
    * Selecione **NanoTV Launcher**.
    * Escolha a opção **SEMPRE** (Always).
 
-*(Nota: Alguns modelos de TV com Android 9/10/11 desabilitam o botão "Sempre" por imposição da fabricante; se isso acontecer na sua TV, utilize o Método 1 ou 2 via ADB para fixar definitivamente).*
-
 ---
 
 ## 🚀 Guia de Instalação Completa
 
 ### Pré-requisitos:
-1. Sua TV e seu computador devem estar conectados na **mesma rede local** (via Wi-Fi ou Cabo de rede).
-2. Ter o [ADB (Android Debug Bridge)](https://developer.android.com/tools/releases/platform-tools) no computador (ou use os comandos do SDK).
+1. TV e computador conectados na **mesma rede local** (via Wi-Fi ou Cabo de rede).
+2. Ter o [ADB (Android Debug Bridge)](https://developer.android.com/tools/releases/platform-tools) instalado no computador.
 
 ### Passo 1: Ativar a Depuração USB na TV
 1. Na sua TV, vá em **Configurações** ➔ **Preferências do dispositivo** ➔ **Sobre**.
@@ -142,66 +150,102 @@ adb shell am start -n com.google.android.tvlauncher/.MainActivity
 ```
 
 ---
+---
 
-## 🛠️ Comandos de Otimização Manual (Referência)
+# 🇺🇸 English Version
 
-Caso queira entender ou executar os comandos individualmente:
+## 💡 Why Does This Project Exist?
+
+Many Android Smart TVs (such as **TCL 50P8M**, Philips, Philco and numerous TV boxes) come with modest hardware: entry-level quad-core processors and **only 2 GB of RAM**.
+
+The official stock Google TV launcher and OEM factory skins heavily overload these TVs:
+* **Google TV Launcher:** spikes up to **90% CPU** and consumes over **250 MB of RAM**, continuously loading video trailers, advertisements, and background sponsored content streams.
+* **Factory Telemetry & Bloatware:** OEM services (such as *TCL BI*, *Waterfall Ads*, *TV Guard*) constantly compete for CPU cores, causing severe stuttering, remote control lag, and delays when opening apps.
+
+**NanoTV Launcher** was built from scratch in **pure native Java & Views (XML + RecyclerView)** without heavy runtime frameworks, restoring the instant fluidity your TV was meant to deliver.
+
+---
+
+## ✨ Key Features (v1.1.0)
+
+* ⚡ **0% Idle CPU Usage:** Clean, static rendering that frees up processor cores for video decoding and streaming.
+* 🧠 **Ultra-Low Memory Footprint (< 20 MB RAM):** Over **90% reduction** compared to the stock Google TV launcher.
+* 🚀 **Interactive RAM Cleaner in Footer:** Dedicated hardware badge in the footer displaying real-time **RAM**, **Free Storage**, and **CPU**. Navigating down to the badge with remote arrow keys and pressing **[OK]** opens the Performance Manager with a 1-click **Free RAM** feature (terminating non-essential background processes).
+* ⚡ **Accurate Dynamic CPU Load & Clock:** Native sysfs kernel monitoring showing real clock speed (in GHz) and dynamic governor load, resolving the Android 9 Pie SELinux restriction where traditional tools showed 0%.
+* 🔀 **Fluid Arrow-Key Move Mode:** Hold [OK] and select "Move App" to enter edit mode highlighted in gold. Move apps continuously in all 4 directions (**Up, Down, Left, Right**) across rows and columns. Press **[OK]** or **[BACK]** to lock and save the layout permanently across reboots.
+* 🗑️ **Smart App Uninstallation:** Seamless uninstallation of user apps via native `ACTION_DELETE`. For pre-installed factory system apps, NanoTV displays a helpful prompt and opens the app's system details directly so you can disable or clear data.
+* 🔌 **Active Network Status Indicator:** Shows whether the TV is connected via **Ethernet (Cable)** or **Wi-Fi** (with network SSID). Clicking it opens the network connection settings instantly.
+* 🛍️ **Direct App Store Shortcut:** Header button that detects and launches the **Google Play Store** (or native OEM/sideload store) in a single click.
+* 🎛️ **Physical Hardware Inputs Selector:** Clean menu listing real inputs (**HDMI 1**, **HDMI 2**, **HDMI 3**, **AV**, and **Live Antenna TV**).
+* ⭐ **Favorites Row:** Pin your most frequently used apps to the top row with smooth horizontal scrolling.
+* 📱 **Full Sideload Support:** Automatically discovers and displays all installed apps, including sideloaded mobile apps hidden by stock Android TV.
+* 📜 **Airy & Proportional Scrollbar:** Shows the exact position of hidden apps with generous padding and sleek design without overlapping app cards.
+* 🚫 **Zero Ads & Zero Telemetry:** Pure local operation with zero background tracking.
+
+---
+
+## 🏠 How to Set NanoTV as Default Launcher (Without Being Asked Every Time)
+
+By default, Android TV attempts to return to Google TV every time the **HOME** button is pressed. To set **NanoTV Launcher as the permanent home screen**, use one of the methods below:
+
+### Method 1: Automated 1-Click Script (Recommended)
+1. Connect your PC and TV to the same local network.
+2. In the `scripts/` folder, run **`optimize_tcl.bat`** (Windows) or **`optimize_tcl.ps1`** (PowerShell).
+3. Type your TV's IP address and hit Enter. NanoTV will be installed, set as the default launcher, and stock bloatware will be disabled.
+
+---
+
+### Method 2: Manual ADB Commands
+
+Run the following commands in your terminal:
 
 ```bash
-# 1. Conectar na TV
-adb connect SEU_IP_AQUI:5555
+# 1. Connect to your TV via ADB (replace with your TV's IP address)
+adb connect YOUR_TV_IP:5555
 
-# 2. Instalar o NanoTV Launcher
-adb install -r releases/NanoTV-Launcher-v1.0.apk
-
-# 3. Definir como tela inicial padrão e desativar o launcher pesado
+# 2. Set NanoTV as the official default Home activity
 adb shell cmd package set-home-activity com.nanotv.launcher/.MainActivity
+
+# 3. Disable the stock Google launcher (Prevents the chooser dialog from popping up)
 adb shell pm disable-user --user 0 com.google.android.tvlauncher
 adb shell pm disable-user --user 0 com.google.android.tvrecommendations
 
-# 4. Desativar bloatwares e telemetria pesada da TCL
-adb shell pm disable-user --user 0 com.tcl.bootadservice
-adb shell pm disable-user --user 0 com.tcl.bi
-adb shell pm disable-user --user 0 com.tcl.waterfall.overseas
-adb shell pm disable-user --user 0 com.tcl.tvweishi
-adb shell pm disable-user --user 0 com.tcl.appmarket2
-adb shell pm disable-user --user 0 com.tcl.esticker
-adb shell pm disable-user --user 0 com.tcl.showmode
-adb shell pm disable-user --user 0 com.tcl.usercenter
-adb shell pm disable-user --user 0 com.tcl.common.terminalmanagerplus
-adb shell pm disable-user --user 0 com.tcl.notereminder
-adb shell pm disable-user --user 0 com.tcl.messagebox
-adb shell pm disable-user --user 0 com.tcl.copydatatotv
-adb shell pm disable-user --user 0 com.tcl.partnercustomizer
-
-# 5. Acelerar animações de janela (resposta instantânea no controle remoto)
-adb shell settings put global window_animation_scale 0.5
-adb shell settings put global transition_animation_scale 0.5
-adb shell settings put global animator_duration_scale 0.5
-
-# 6. Abrir o NanoTV
-adb shell am start -n com.nanotv.launcher/.MainActivity
+# 4. Trigger the Home button to open NanoTV immediately
+adb shell input keyevent KEYCODE_HOME
 ```
+
+> **Why disable the Google TV package?**  
+> On Android TV, the stock launcher has high priority. Disabling it makes Android recognize NanoTV Launcher as the **only available home screen**, completely eliminating the prompt dialog and stopping Google processes from consuming RAM in the background. *(This is 100% reversible and safe).*
 
 ---
 
-## 💻 Compilação pelo Código-Fonte
+### Method 3: Using the Remote Control (No Computer Required)
 
-Este projeto foi construído usando Android Studio com Gradle padrão:
-1. Clone este repositório:
+1. Install the NanoTV APK on your TV (via USB drive or *Send Files to TV*).
+2. Press the **HOME** button on the remote control.
+3. When the *"Complete action using"* dialog appears:
+   * Select **NanoTV Launcher**.
+   * Choose **ALWAYS**.
+
+---
+
+## 💻 Building from Source
+
+This project is built using Android Studio with standard Gradle:
+1. Clone this repository:
    ```bash
    git clone https://github.com/mateuspaulo/nanotv-launcher.git
    ```
-2. Abra a pasta do projeto no **Android Studio**.
-3. Compile o APK de depuração via terminal:
+2. Open the project folder in **Android Studio**.
+3. Build the debug APK via terminal:
    ```bash
    ./gradlew assembleDebug
    ```
-4. O APK gerado estará em: `app/build/outputs/apk/debug/app-debug.apk`.
+4. Output APK location: `app/build/outputs/apk/debug/app-debug.apk`.
 
 ---
 
-## 📄 Licença
+## 📄 License
 
-Distribuído sob a licença **MIT**. Veja `LICENSE` para mais informações.
-Sinta-se livre para contribuir, sugerir melhorias e criar forks para outros modelos de televisores!
+Distributed under the **MIT** License. See `LICENSE` for more information.
+Feel free to contribute, submit issues, and fork for other TV models!

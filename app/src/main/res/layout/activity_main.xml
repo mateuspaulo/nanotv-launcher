@@ -41,30 +41,6 @@
                 android:textSize="12sp" />
         </LinearLayout>
 
-        <!-- Indicador de Métricas de Sistema (RAM / CPU / Armazenamento) -->
-        <LinearLayout
-            android:id="@+id/layout_metrics"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:background="@drawable/bg_metrics_badge"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingStart="12dp"
-            android:paddingTop="6dp"
-            android:paddingEnd="12dp"
-            android:paddingBottom="6dp">
-
-            <TextView
-                android:id="@+id/tv_metrics"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="🧠 RAM: --   •   💾 Disco: --   •   ⚡ CPU: --"
-                android:textColor="@color/text_secondary"
-                android:textSize="11sp"
-                android:textStyle="bold" />
-        </LinearLayout>
-
         <View
             android:layout_width="0dp"
             android:layout_height="1dp"
@@ -188,7 +164,7 @@
             android:clipToPadding="true"
             android:fadeScrollbars="false"
             android:paddingEnd="22dp"
-            android:paddingBottom="12dp"
+            android:paddingBottom="8dp"
             android:scrollbarSize="6dp"
             android:scrollbarStyle="insideOverlay"
             android:scrollbarThumbVertical="@drawable/scrollbar_thumb"
@@ -196,13 +172,52 @@
             android:scrollbars="vertical" />
     </LinearLayout>
 
-    <!-- Footer Controls Hint -->
-    <TextView
-        android:id="@+id/tv_footer_hint"
+    <!-- Footer Area (Métricas de Sistema + Dicas de Controle) -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="[OK] Abrir   •   [Segurar OK] Opções / Mover / Desinstalar   •   [MENU] Configurações"
-        android:textColor="@color/text_secondary"
-        android:textSize="11sp" />
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="4dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <!-- Badge Clicável de Métricas de Sistema -->
+        <LinearLayout
+            android:id="@+id/layout_metrics"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/selector_metrics_badge"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="12dp"
+            android:paddingTop="5dp"
+            android:paddingEnd="12dp"
+            android:paddingBottom="5dp">
+
+            <TextView
+                android:id="@+id/tv_metrics"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🧠 RAM: --   •   💾 Disco: --   •   ⚡ CPU: --"
+                android:textColor="@color/text_secondary"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
+
+        <!-- Dicas de Atalhos do Controle -->
+        <TextView
+            android:id="@+id/tv_footer_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="[OK] Abrir   •   [Segurar OK] Mover / Opções   •   [MENU] Configurações"
+            android:textColor="@color/text_secondary"
+            android:textSize="11sp" />
+    </LinearLayout>
 </LinearLayout>

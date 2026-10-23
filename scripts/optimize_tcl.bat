@@ -32,15 +32,23 @@ timeout /t 3 >nul
 
 echo.
 echo [*] Instalando o NanoTV Launcher...
-if exist "..\releases\NanoTV-Launcher-v1.0.apk" (
+if exist "..\releases\NanoTV-Launcher-v1.1.0.apk" (
+    adb -s %TV_IP%:5555 install -r "..\releases\NanoTV-Launcher-v1.1.0.apk"
+) else if exist "releases\NanoTV-Launcher-v1.1.0.apk" (
+    adb -s %TV_IP%:5555 install -r "releases\NanoTV-Launcher-v1.1.0.apk"
+) else if exist "..\releases\NanoTV-Launcher-v1.0.apk" (
     adb -s %TV_IP%:5555 install -r "..\releases\NanoTV-Launcher-v1.0.apk"
 ) else if exist "releases\NanoTV-Launcher-v1.0.apk" (
     adb -s %TV_IP%:5555 install -r "releases\NanoTV-Launcher-v1.0.apk"
-) else if exist "NanoTV-Launcher-v1.0.apk" (
-    adb -s %TV_IP%:5555 install -r "NanoTV-Launcher-v1.0.apk"
 ) else (
-    echo [AVISO] APK nao encontrado na pasta releases. Baixe o NanoTV-Launcher-v1.0.apk das Releases do GitHub.
+    for %%f in ("..\releases\*.apk" "releases\*.apk" "*.apk") do (
+        echo [*] Instalando %%f ...
+        adb -s %TV_IP%:5555 install -r "%%f"
+        goto :apk_installed
+    )
+    echo [AVISO] APK nao encontrado na pasta releases. Baixe o APK das Releases do GitHub.
 )
+:apk_installed
 
 echo.
 echo [*] Configurando NanoTV como launcher padrao...

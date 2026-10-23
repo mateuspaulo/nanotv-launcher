@@ -10,6 +10,6 @@
 .cxx
 *.log
 
-# Keep the release APK
+# Keep release APKs
 releases/*
-!releases/NanoTV-Launcher-v1.0.apk
+!releases/NanoTV-Launcher-*.apk

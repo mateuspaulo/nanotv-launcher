@@ -11,4 +11,6 @@
     <string name="opt_remove_favorite">Remover dos Favoritos</string>
     <string name="opt_app_info">Informações do Aplicativo</string>
     <string name="empty_favorites">Segure OK em qualquer app abaixo para adicionar aos Favoritos.</string>
+    <string name="footer_hint_normal">[OK] Abrir   •   [Segurar OK] Mover / Opções   •   [MENU] Configurações</string>
+    <string name="footer_hint_moving">🔀 MODO ORGANIZAR: Setas (← ↑ → ↓) movem o app • [OK] ou [VOLTAR] salva</string>
 </resources>

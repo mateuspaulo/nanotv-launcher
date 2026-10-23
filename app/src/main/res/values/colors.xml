@@ -9,4 +9,6 @@
     <color name="text_secondary">#8C9BAE</color>
     <color name="header_button_normal">#1A1E27</color>
     <color name="header_button_focused">#00E5FF</color>
+    <color name="move_highlight">#FFD700</color>
+    <color name="move_highlight_bg">#363012</color>
 </resources>
