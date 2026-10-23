@@ -1,4 +1,4 @@
-﻿@echo off
+@echo off
 chcp 65001 >nul
 title Restaurador TCL Android TV (Voltar ao Padrao de Fabrica)
 cls
@@ -27,6 +27,7 @@ echo.
 echo [*] Reabilitando launcher e recomendacoes do Google...
 adb -s %TV_IP%:5555 shell "pm enable com.google.android.tvlauncher"
 adb -s %TV_IP%:5555 shell "pm enable com.google.android.tvrecommendations"
+adb -s %TV_IP%:5555 shell "cmd package set-home-activity com.google.android.tvlauncher/.MainActivity"
 
 echo.
 echo [*] Reabilitando servicos da TCL...

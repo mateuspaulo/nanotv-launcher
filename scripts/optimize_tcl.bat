@@ -1,4 +1,4 @@
-﻿@echo off
+@echo off
 chcp 65001 >nul
 title Otimizador TCL Android TV + NanoTV Launcher
 cls
@@ -76,6 +76,7 @@ adb -s %TV_IP%:5555 shell "settings put global animator_duration_scale 0.5"
 echo.
 echo [*] Abrindo o NanoTV Launcher na TV...
 adb -s %TV_IP%:5555 shell "am start -n com.nanotv.launcher/.MainActivity"
+adb -s %TV_IP%:5555 shell "input keyevent KEYCODE_HOME"
 
 echo.
 echo ======================================================================

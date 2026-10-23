@@ -1,4 +1,4 @@
-﻿param(
+param(
     [string]$IP
 )
 
@@ -22,6 +22,7 @@ adb connect $target
 Write-Host "`n[*] Reabilitando launcher do Google..." -ForegroundColor Yellow
 adb -s $target shell "pm enable com.google.android.tvlauncher"
 adb -s $target shell "pm enable com.google.android.tvrecommendations"
+adb -s $target shell "cmd package set-home-activity com.google.android.tvlauncher/.MainActivity"
 
 Write-Host "`n[*] Reabilitando servicos da TCL..." -ForegroundColor Yellow
 $tclBloat = @(

@@ -1,4 +1,4 @@
-﻿param(
+param(
     [string]$IP
 )
 
@@ -61,6 +61,7 @@ adb -s $target shell "settings put global animator_duration_scale 0.5"
 
 Write-Host "`n[*] Abrindo NanoTV Launcher..." -ForegroundColor Yellow
 adb -s $target shell "am start -n com.nanotv.launcher/.MainActivity"
+adb -s $target shell "input keyevent KEYCODE_HOME"
 
 Write-Host "`n[SUCESSO] TV otimizada com sucesso! Aproveite a nova fluidez.`n" -ForegroundColor Green
 
