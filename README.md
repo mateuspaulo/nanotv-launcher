@@ -23,11 +23,12 @@ O **NanoTV Launcher** foi desenvolvido em **Java/Views nativas puras (XML + Recy
 * 🧠 **Uso Mínimo de RAM (< 20 MB):** Redução de mais de **90%** comparado ao launcher oficial do Google.
 * 📊 **Métricas de Hardware em Tempo Real:** Exibe no topo o consumo de **RAM**, **Espaço em Disco Livre** e **Uso de CPU**. *(Pode ser ocultado a qualquer momento no menu de Configurações)*.
 * 🔌 **Indicador de Conexão com a Internet:** Identifica automaticamente se a TV está conectada via **Cabo (Ethernet)** ou **Wi-Fi** (com nome da rede). Ao clicar nele com o controle, abre diretamente a tela de conexões da TV.
+* 🛍️ **Acesso Rápido à Loja de Apps:** Botão no topo que detecta e abre diretamente a **Google Play Store** (ou loja nativa/alternativa da sua TV) em um único clique.
 * 🎛️ **Seletor Real de Entradas Físicas:** Menu limpo com as portas reais de hardware (**HDMI 1**, **HDMI 2**, **HDMI 3**, **AV** e **TV Aberta/Antena**).
 * 🔀 **Organização e Posição Salva Permanentemente:** Mova os aplicativos para onde quiser (esquerda, direita ou início). A ordem fica gravada no armazenamento interno e nunca se perde ao desligar a TV.
 * ⭐ **Linha de Favoritos:** Fixe os seus aplicativos mais usados no topo.
 * 🛠️ **Menu Completo de Gerenciamento:** Segure a tecla **[OK]** em qualquer app para favoritar, mover de posição, **desinstalar** ou **ocultar** da tela.
-* 📜 **Barra de Rolagem Lateral Visível:** Indica claramente que há mais aplicativos abaixo.
+* 📜 **Barra de Rolagem Proporcional e Arejada:** Indica com exatidão a quantidade real de apps fora da tela com espaçamento dedicado e elegante, sem sobrepor os aplicativos.
 * 📱 **Suporte a Apps Sideload:** Exibe todos os aplicativos instalados, inclusive aqueles que o Android TV padrão esconde por não terem banner de TV.
 * 🚫 **Zero Propagandas e Zero Telemetria:** Nenhuma conexão externa desnecessária.
 

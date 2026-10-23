@@ -21,15 +21,17 @@ import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.StatFs;
+import android.content.pm.ApplicationInfo;
 import android.provider.Settings;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -57,11 +59,12 @@ public class MainActivity extends AppCompatActivity implements AppAdapter.OnAppC
     private static final String KEY_HIDDEN_PACKAGES = "hidden_packages_set";
     private static final String KEY_SHOW_METRICS = "show_hardware_metrics";
 
+    private View layoutFavorites;
     private RecyclerView rvFavorites;
     private RecyclerView rvAllApps;
     private TextView tvFavoritesTitle;
-    private ScrollView mainScrollView;
     private Button btnNetwork;
+    private Button btnStore;
     private Button btnInputs;
     private Button btnSettings;
     private LinearLayout layoutMetrics;
@@ -100,11 +103,12 @@ public class MainActivity extends AppCompatActivity implements AppAdapter.OnAppC
     }
 
     private void initViews() {
-        mainScrollView = findViewById(R.id.main_scroll_view);
+        layoutFavorites = findViewById(R.id.layout_favorites);
         tvFavoritesTitle = findViewById(R.id.tv_favorites_title);
         rvFavorites = findViewById(R.id.rv_favorites);
         rvAllApps = findViewById(R.id.rv_all_apps);
         btnNetwork = findViewById(R.id.btn_network);
+        btnStore = findViewById(R.id.btn_store);
         btnInputs = findViewById(R.id.btn_inputs);
         btnSettings = findViewById(R.id.btn_settings);
         layoutMetrics = findViewById(R.id.layout_metrics);
@@ -184,8 +188,10 @@ public class MainActivity extends AppCompatActivity implements AppAdapter.OnAppC
 
     private void setupHeaderButtons() {
         btnNetwork.setOnClickListener(v -> openNetworkSettings());
+        btnStore.setOnClickListener(v -> openAppStore());
         btnInputs.setOnClickListener(v -> showTvInputsDialog());
         btnSettings.setOnClickListener(v -> showSettingsMenu());
+        updateStoreButton();
     }
 
     // ----------------------------------------------------
@@ -428,10 +434,143 @@ public class MainActivity extends AppCompatActivity implements AppAdapter.OnAppC
     }
 
     // ----------------------------------------------------
+    // GERENCIAMENTO DA LOJA DE APLICATIVOS (PLAY STORE / LOJA TV)
+    // ----------------------------------------------------
+    private static class StoreOption {
+        final String name;
+        final String packageName;
+        final Intent intent;
+
+        StoreOption(String name, String packageName, Intent intent) {
+            this.name = name;
+            this.packageName = packageName;
+            this.intent = intent;
+        }
+    }
+
+    private List<StoreOption> detectAvailableStores() {
+        PackageManager pm = getPackageManager();
+        List<StoreOption> stores = new ArrayList<>();
+
+        // 1. Google Play Store oficial
+        if (isPackageAvailableAndEnabled("com.android.vending")) {
+            Intent playIntent = pm.getLeanbackLaunchIntentForPackage("com.android.vending");
+            if (playIntent == null) playIntent = pm.getLaunchIntentForPackage("com.android.vending");
+            if (playIntent == null) {
+                playIntent = new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_APP_MARKET);
+            }
+            if (playIntent != null) {
+                stores.add(new StoreOption("Google Play Store", "com.android.vending", playIntent));
+            }
+        }
+
+        // 2. Loja de Fábrica TCL
+        if (isPackageAvailableAndEnabled("com.tcl.appmarket2")) {
+            Intent tclIntent = pm.getLeanbackLaunchIntentForPackage("com.tcl.appmarket2");
+            if (tclIntent == null) tclIntent = pm.getLaunchIntentForPackage("com.tcl.appmarket2");
+            if (tclIntent != null) {
+                stores.add(new StoreOption("Loja TCL", "com.tcl.appmarket2", tclIntent));
+            }
+        }
+
+        // 3. Outras lojas populares de Android TV / Sideload
+        String[][] thirdPartyStores = new String[][]{
+                {"cm.aptoide.tv", "Aptoide TV"},
+                {"cm.aptoide.pt", "Aptoide"},
+                {"com.aurora.store", "Aurora Store"},
+                {"com.amazon.venezia", "Amazon Appstore"},
+                {"org.fdroid.fdroid", "F-Droid"},
+                {"com.xiaomi.mitv.appstore", "Xiaomi App Store"}
+        };
+        for (String[] s : thirdPartyStores) {
+            String pkg = s[0];
+            String name = s[1];
+            if (isPackageAvailableAndEnabled(pkg)) {
+                Intent intent = pm.getLeanbackLaunchIntentForPackage(pkg);
+                if (intent == null) intent = pm.getLaunchIntentForPackage(pkg);
+                if (intent != null) {
+                    stores.add(new StoreOption(name, pkg, intent));
+                }
+            }
+        }
+
+        // 4. Intent genérico do sistema (CATEGORY_APP_MARKET)
+        if (stores.isEmpty()) {
+            Intent marketIntent = new Intent(Intent.ACTION_MAIN);
+            marketIntent.addCategory(Intent.CATEGORY_APP_MARKET);
+            marketIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            if (marketIntent.resolveActivity(pm) != null) {
+                stores.add(new StoreOption("Loja de Aplicativos", "", marketIntent));
+            }
+        }
+
+        return stores;
+    }
+
+    private boolean isPackageAvailableAndEnabled(String packageName) {
+        try {
+            ApplicationInfo ai = getPackageManager().getApplicationInfo(packageName, 0);
+            return ai != null && ai.enabled;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
+    }
+
+    private void updateStoreButton() {
+        if (btnStore == null) return;
+        List<StoreOption> stores = detectAvailableStores();
+        if (stores.isEmpty()) {
+            btnStore.setText("🛍️ Loja de Apps");
+        } else if (stores.size() == 1 && stores.get(0).packageName.equals("com.android.vending")) {
+            btnStore.setText("🛍️ Play Store");
+        } else if (stores.size() == 1 && stores.get(0).packageName.equals("com.tcl.appmarket2")) {
+            btnStore.setText("🛍️ Loja TCL");
+        } else if (stores.size() == 1) {
+            btnStore.setText("🛍️ " + stores.get(0).name);
+        } else {
+            btnStore.setText("🛍️ Lojas de Apps");
+        }
+    }
+
+    private void openAppStore() {
+        List<StoreOption> stores = detectAvailableStores();
+        if (stores.isEmpty()) {
+            Toast.makeText(this, getString(R.string.no_store_found), Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if (stores.size() == 1) {
+            try {
+                startActivity(stores.get(0).intent);
+            } catch (Exception e) {
+                Toast.makeText(this, "Erro ao abrir a loja de aplicativos.", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            CharSequence[] names = new CharSequence[stores.size()];
+            for (int i = 0; i < stores.size(); i++) {
+                names[i] = stores.get(i).name;
+            }
+            new AlertDialog.Builder(this)
+                    .setTitle(getString(R.string.dialog_select_store))
+                    .setItems(names, (dialog, which) -> {
+                        try {
+                            startActivity(stores.get(which).intent);
+                        } catch (Exception e) {
+                            Toast.makeText(this, "Erro ao abrir " + names[which], Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .show();
+        }
+    }
+
+
+
+    // ----------------------------------------------------
     // MENU DE CONFIGURAÇÕES COM TOGGLE DE MÉTRICAS
     // ----------------------------------------------------
     private void showSettingsMenu() {
         List<String> options = new ArrayList<>();
+        options.add("🛍️ Abrir Loja de Aplicativos");
         options.add("⚙️ Configurações do Android TV");
         options.add("📊 Métricas de Hardware (RAM/Disco/CPU): " + (showMetrics ? "[ATIVADO]" : "[DESATIVADO]"));
         options.add("🏠 Definir como Tela Inicial Padrão");
@@ -443,18 +582,20 @@ public class MainActivity extends AppCompatActivity implements AppAdapter.OnAppC
                 .setTitle("Configurações")
                 .setItems(options.toArray(new CharSequence[0]), (dialog, which) -> {
                     if (which == 0) {
+                        openAppStore();
+                    } else if (which == 1) {
                         try {
                             startActivity(new Intent(Settings.ACTION_SETTINGS));
                         } catch (Exception e) {
                             Toast.makeText(this, "Erro ao abrir configurações.", Toast.LENGTH_SHORT).show();
                         }
-                    } else if (which == 1) {
+                    } else if (which == 2) {
                         // Alterna métricas de hardware
                         showMetrics = !showMetrics;
                         layoutMetrics.setVisibility(showMetrics ? View.VISIBLE : View.GONE);
                         saveSavedState();
                         Toast.makeText(this, showMetrics ? "Métricas ativadas." : "Métricas ocultadas.", Toast.LENGTH_SHORT).show();
-                    } else if (which == 2) {
+                    } else if (which == 3) {
                         try {
                             startActivity(new Intent(Settings.ACTION_HOME_SETTINGS));
                         } catch (Exception e) {
@@ -463,7 +604,7 @@ public class MainActivity extends AppCompatActivity implements AppAdapter.OnAppC
                             homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(Intent.createChooser(homeIntent, "Selecione o NanoTV e marque 'Sempre'"));
                         }
-                    } else if (which == 3) {
+                    } else if (which == 4) {
                         hiddenPackages.clear();
                         saveSavedState();
                         loadInstalledApps();
@@ -555,9 +696,9 @@ public class MainActivity extends AppCompatActivity implements AppAdapter.OnAppC
                 favoritesAdapter.setApps(favoriteAppsList);
 
                 if (favoriteAppsList.isEmpty()) {
-                    tvFavoritesTitle.setVisibility(View.GONE);
-                    rvFavorites.setVisibility(View.GONE);
+                    layoutFavorites.setVisibility(View.GONE);
                 } else {
+                    layoutFavorites.setVisibility(View.VISIBLE);
                     tvFavoritesTitle.setVisibility(View.VISIBLE);
                     rvFavorites.setVisibility(View.VISIBLE);
                 }
@@ -710,6 +851,7 @@ public class MainActivity extends AppCompatActivity implements AppAdapter.OnAppC
     protected void onResume() {
         super.onResume();
         updateNetworkStatus();
+        updateStoreButton();
         if (metricsRunnable != null) {
             metricsHandler.post(metricsRunnable);
         }
@@ -726,9 +868,9 @@ public class MainActivity extends AppCompatActivity implements AppAdapter.OnAppC
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (mainScrollView != null) {
-                mainScrollView.smoothScrollTo(0, 0);
-                if (!favoriteAppsList.isEmpty()) {
+            if (rvAllApps != null) {
+                rvAllApps.smoothScrollToPosition(0);
+                if (layoutFavorites != null && layoutFavorites.getVisibility() == View.VISIBLE && rvFavorites != null) {
                     rvFavorites.requestFocus();
                 } else {
                     rvAllApps.requestFocus();

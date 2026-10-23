@@ -5,15 +5,15 @@
     android:background="@color/bg_main"
     android:orientation="vertical"
     android:paddingStart="28dp"
-    android:paddingTop="18dp"
+    android:paddingTop="16dp"
     android:paddingEnd="20dp"
-    android:paddingBottom="12dp">
+    android:paddingBottom="10dp">
 
     <!-- Top Header Bar -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
+        android:layout_marginBottom="10dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -46,7 +46,7 @@
             android:id="@+id/layout_metrics"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
+            android:layout_marginStart="20dp"
             android:background="@drawable/bg_metrics_badge"
             android:gravity="center_vertical"
             android:orientation="horizontal"
@@ -74,14 +74,30 @@
         <Button
             android:id="@+id/btn_network"
             android:layout_width="wrap_content"
-            android:layout_height="36dp"
-            android:layout_marginEnd="8dp"
+            android:layout_height="34dp"
+            android:layout_marginEnd="6dp"
             android:background="@drawable/selector_header_button"
             android:clickable="true"
             android:focusable="true"
-            android:paddingStart="14dp"
-            android:paddingEnd="14dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
             android:text="🌐 Rede"
+            android:textColor="@color/text_primary"
+            android:textSize="11sp"
+            android:textStyle="bold" />
+
+        <!-- Botão Loja de Aplicativos (Play Store / Loja da TV) -->
+        <Button
+            android:id="@+id/btn_store"
+            android:layout_width="wrap_content"
+            android:layout_height="34dp"
+            android:layout_marginEnd="6dp"
+            android:background="@drawable/selector_header_button"
+            android:clickable="true"
+            android:focusable="true"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:text="@string/btn_store"
             android:textColor="@color/text_primary"
             android:textSize="11sp"
             android:textStyle="bold" />
@@ -90,13 +106,13 @@
         <Button
             android:id="@+id/btn_inputs"
             android:layout_width="wrap_content"
-            android:layout_height="36dp"
-            android:layout_marginEnd="8dp"
+            android:layout_height="34dp"
+            android:layout_marginEnd="6dp"
             android:background="@drawable/selector_header_button"
             android:clickable="true"
             android:focusable="true"
-            android:paddingStart="14dp"
-            android:paddingEnd="14dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
             android:text="@string/btn_inputs"
             android:textColor="@color/text_primary"
             android:textSize="11sp"
@@ -106,79 +122,79 @@
         <Button
             android:id="@+id/btn_settings"
             android:layout_width="wrap_content"
-            android:layout_height="36dp"
+            android:layout_height="34dp"
             android:background="@drawable/selector_header_button"
             android:clickable="true"
             android:focusable="true"
-            android:paddingStart="14dp"
-            android:paddingEnd="14dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
             android:text="@string/btn_settings"
             android:textColor="@color/text_primary"
             android:textSize="11sp"
             android:textStyle="bold" />
     </LinearLayout>
 
-    <!-- Main Content Area: ScrollView com BARRA DE ROLAGEM PERMANENTE -->
-    <ScrollView
-        android:id="@+id/main_scroll_view"
+    <!-- Section 1: Favoritos (Oculto dinamicamente se não houver favoritos) -->
+    <LinearLayout
+        android:id="@+id/layout_favorites"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="6dp"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/tv_favorites_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="4dp"
+            android:text="@string/section_favorites"
+            android:textColor="@color/focus_highlight"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_favorites"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:orientation="horizontal" />
+    </LinearLayout>
+
+    <!-- Section 2: Todos os Aplicativos -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:clipToPadding="false"
-        android:fadeScrollbars="false"
-        android:fillViewport="true"
-        android:paddingEnd="10dp"
-        android:scrollbarSize="6dp"
-        android:scrollbarThumbVertical="@drawable/scrollbar_thumb"
-        android:scrollbarTrackVertical="@drawable/scrollbar_track"
-        android:scrollbars="vertical">
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/tv_all_apps_title"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="4dp"
+            android:text="@string/section_all_apps"
+            android:textColor="@color/text_primary"
+            android:textSize="15sp"
+            android:textStyle="bold" />
 
-            <!-- Section 1: Favoritos -->
-            <TextView
-                android:id="@+id/tv_favorites_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="4dp"
-                android:text="@string/section_favorites"
-                android:textColor="@color/focus_highlight"
-                android:textSize="15sp"
-                android:textStyle="bold" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_favorites"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:clipToPadding="false"
-                android:nestedScrollingEnabled="false"
-                android:orientation="horizontal" />
-
-            <!-- Section 2: Todos os Aplicativos -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="4dp"
-                android:text="@string/section_all_apps"
-                android:textColor="@color/text_primary"
-                android:textSize="15sp"
-                android:textStyle="bold" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_all_apps"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
-                android:clipToPadding="false"
-                android:nestedScrollingEnabled="false" />
-        </LinearLayout>
-    </ScrollView>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_all_apps"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:clipToPadding="true"
+            android:fadeScrollbars="false"
+            android:paddingEnd="22dp"
+            android:paddingBottom="12dp"
+            android:scrollbarSize="6dp"
+            android:scrollbarStyle="insideOverlay"
+            android:scrollbarThumbVertical="@drawable/scrollbar_thumb"
+            android:scrollbarTrackVertical="@drawable/scrollbar_track"
+            android:scrollbars="vertical" />
+    </LinearLayout>
 
     <!-- Footer Controls Hint -->
     <TextView

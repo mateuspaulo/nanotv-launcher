@@ -2,8 +2,11 @@
     <string name="app_name">NanoTV</string>
     <string name="section_favorites">⭐ Favoritos</string>
     <string name="section_all_apps">📺 Todos os Aplicativos</string>
-    <string name="btn_inputs">Entradas (HDMI)</string>
-    <string name="btn_settings">Configurações</string>
+    <string name="btn_inputs">📺 Entradas</string>
+    <string name="btn_settings">⚙️ Configurações</string>
+    <string name="btn_store">🛍️ Play Store</string>
+    <string name="dialog_select_store">Selecionar Loja de Aplicativos</string>
+    <string name="no_store_found">Nenhuma loja de aplicativos encontrada na TV.</string>
     <string name="opt_add_favorite">Adicionar aos Favoritos</string>
     <string name="opt_remove_favorite">Remover dos Favoritos</string>
     <string name="opt_app_info">Informações do Aplicativo</string>
