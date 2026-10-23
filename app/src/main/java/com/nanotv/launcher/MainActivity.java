@@ -957,7 +957,7 @@ public class MainActivity extends AppCompatActivity implements AppAdapter.OnAppC
     private boolean isSystemApp(String packageName) {
         try {
             ApplicationInfo ai = getPackageManager().getApplicationInfo(packageName, 0);
-            return (ai.flags & (ApplicationInfo.FLAG_SYSTEM | ApplicationInfo.FLAG_UPDATED_SYSTEM_APP)) != 0;
+            return (ai.flags & ApplicationInfo.FLAG_SYSTEM) != 0 && (ai.flags & ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) == 0;
         } catch (PackageManager.NameNotFoundException e) {
             return false;
         }
@@ -965,11 +965,18 @@ public class MainActivity extends AppCompatActivity implements AppAdapter.OnAppC
 
     private void uninstallApp(String packageName, String appLabel) {
         if (isSystemApp(packageName)) {
-            // Aplicativos de sistema não podem ser desinstalados via ACTION_DELETE no Android TV
+            // Aplicativos de sistema puros de fábrica não podem ser removidos pelo Android TV
             new AlertDialog.Builder(this)
-                    .setTitle(appLabel)
-                    .setMessage("Este é um aplicativo do sistema (pré-instalado) e o Android TV não permite desinstalá-lo diretamente.\n\nDeseja abrir os Detalhes do Aplicativo nas Configurações para desativar ou limpar os dados?")
+                    .setTitle("🗑️ " + appLabel)
+                    .setMessage("Este aplicativo veio pré-instalado de fábrica no sistema da TV.\n\n• Desinstalar: O Android TV bloqueia a remoção direta de apps de fábrica.\n• Alternativas: Você pode Desativá-lo nas Configurações ou Ocultá-lo da tela do NanoTV.\n\nO que deseja fazer?")
                     .setPositiveButton("Abrir Configurações", (dialog, which) -> openAppDetails(packageName))
+                    .setNeutralButton("Ocultar da Tela", (dialog, which) -> {
+                        hiddenPackages.add(packageName);
+                        favoriteOrder.remove(packageName);
+                        saveSavedState();
+                        loadInstalledApps();
+                        Toast.makeText(this, appLabel + " foi ocultado.", Toast.LENGTH_SHORT).show();
+                    })
                     .setNegativeButton("Cancelar", null)
                     .show();
             return;
@@ -987,7 +994,8 @@ public class MainActivity extends AppCompatActivity implements AppAdapter.OnAppC
                 delIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(delIntent);
             } catch (Exception ex) {
-                Toast.makeText(this, "Não foi possível abrir o desinstalador.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Não foi possível abrir o desinstalador. Abrindo configurações...", Toast.LENGTH_SHORT).show();
+                openAppDetails(packageName);
             }
         }
     }
@@ -1029,6 +1037,7 @@ public class MainActivity extends AppCompatActivity implements AppAdapter.OnAppC
     @Override
     protected void onResume() {
         super.onResume();
+        loadInstalledApps();
         updateNetworkStatus();
         updateStoreButton();
         if (metricsRunnable != null) {
