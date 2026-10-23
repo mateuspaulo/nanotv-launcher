@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">NanoTV</string>
+    <string name="section_favorites">⭐ Favoritos</string>
+    <string name="section_all_apps">📺 Todos os Aplicativos</string>
+    <string name="btn_inputs">Entradas (HDMI)</string>
+    <string name="btn_settings">Configurações</string>
+    <string name="opt_add_favorite">Adicionar aos Favoritos</string>
+    <string name="opt_remove_favorite">Remover dos Favoritos</string>
+    <string name="opt_app_info">Informações do Aplicativo</string>
+    <string name="empty_favorites">Segure OK em qualquer app abaixo para adicionar aos Favoritos.</string>
+</resources>
