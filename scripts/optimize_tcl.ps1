@@ -21,6 +21,7 @@ adb connect $target
 
 Write-Host "`n[*] Instalando NanoTV Launcher..." -ForegroundColor Yellow
 $apkCandidates = @(
+    (Join-Path $PSScriptRoot "..\releases\NanoTV-Launcher-v1.2.0.apk"),
     (Join-Path $PSScriptRoot "..\releases\NanoTV-Launcher-v1.1.0.apk"),
     (Join-Path $PSScriptRoot "..\releases\NanoTV-Launcher-v1.0.apk")
 )

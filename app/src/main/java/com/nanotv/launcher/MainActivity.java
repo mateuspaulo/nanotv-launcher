@@ -26,9 +26,12 @@ import android.provider.Settings;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -59,7 +62,11 @@ public class MainActivity extends AppCompatActivity implements AppAdapter.OnAppC
     private static final String KEY_ALL_APPS_ORDER = "all_apps_order_list";
     private static final String KEY_HIDDEN_PACKAGES = "hidden_packages_set";
     private static final String KEY_SHOW_METRICS = "show_hardware_metrics";
+    private static final String KEY_BG_THEME = "background_gradient_theme";
 
+    private FrameLayout rootContainer;
+    private View bgGradientA;
+    private View bgGradientB;
     private View layoutFavorites;
     private RecyclerView rvFavorites;
     private RecyclerView rvAllApps;
@@ -82,6 +89,11 @@ public class MainActivity extends AppCompatActivity implements AppAdapter.OnAppC
     private final List<String> allAppsOrder = new ArrayList<>();
     private final Set<String> hiddenPackages = new HashSet<>();
     private boolean showMetrics = true;
+    private int currentBgTheme = 1; // Padrão: 1 = Aurora Boreal (teste suave moderno)
+    private int gradientStep = 0;
+    private boolean isLayerAShowing = true;
+    private final Handler gradientHandler = new Handler(Looper.getMainLooper());
+    private Runnable gradientRunnable;
 
     private boolean isMoveModeActive = false;
     private boolean isMovingFavoriteSection = false;
@@ -109,6 +121,9 @@ public class MainActivity extends AppCompatActivity implements AppAdapter.OnAppC
     }
 
     private void initViews() {
+        rootContainer = findViewById(R.id.root_container);
+        bgGradientA = findViewById(R.id.bg_gradient_a);
+        bgGradientB = findViewById(R.id.bg_gradient_b);
         layoutFavorites = findViewById(R.id.layout_favorites);
         tvFavoritesTitle = findViewById(R.id.tv_favorites_title);
         rvFavorites = findViewById(R.id.rv_favorites);
@@ -157,6 +172,10 @@ public class MainActivity extends AppCompatActivity implements AppAdapter.OnAppC
         // Configuração de exibição de métricas
         showMetrics = prefs.getBoolean(KEY_SHOW_METRICS, true);
         layoutMetrics.setVisibility(showMetrics ? View.VISIBLE : View.GONE);
+
+        // Tema de fundo animado
+        currentBgTheme = prefs.getInt(KEY_BG_THEME, 1); // 1 = Aurora Boreal por padrão
+        applyBackgroundTheme(currentBgTheme);
     }
 
     private void saveSavedState() {
@@ -178,6 +197,7 @@ public class MainActivity extends AppCompatActivity implements AppAdapter.OnAppC
                 .putString(KEY_ALL_APPS_ORDER, allSb.toString())
                 .putStringSet(KEY_HIDDEN_PACKAGES, new HashSet<>(hiddenPackages))
                 .putBoolean(KEY_SHOW_METRICS, showMetrics)
+                .putInt(KEY_BG_THEME, currentBgTheme)
                 .apply();
     }
 
@@ -670,12 +690,13 @@ public class MainActivity extends AppCompatActivity implements AppAdapter.OnAppC
     }
 
     // ----------------------------------------------------
-    // MENU DE CONFIGURAÇÕES COM TOGGLE DE MÉTRICAS
+    // MENU DE CONFIGURAÇÕES COM TOGGLE DE MÉTRICAS E TEMA
     // ----------------------------------------------------
     private void showSettingsMenu() {
         List<String> options = new ArrayList<>();
         options.add("🛍️ Abrir Loja de Aplicativos");
         options.add("⚙️ Configurações do Android TV");
+        options.add("🎨 Fundo Animado: " + getBackgroundThemeName(currentBgTheme));
         options.add("📊 Métricas de Hardware (RAM/Disco/CPU): " + (showMetrics ? "[ATIVADO]" : "[DESATIVADO]"));
         options.add("🏠 Definir como Tela Inicial Padrão");
         if (!hiddenPackages.isEmpty()) {
@@ -694,11 +715,13 @@ public class MainActivity extends AppCompatActivity implements AppAdapter.OnAppC
                             Toast.makeText(this, "Erro ao abrir configurações.", Toast.LENGTH_SHORT).show();
                         }
                     } else if (which == 2) {
+                        showBackgroundThemeDialog();
+                    } else if (which == 3) {
                         showMetrics = !showMetrics;
                         layoutMetrics.setVisibility(showMetrics ? View.VISIBLE : View.GONE);
                         saveSavedState();
                         Toast.makeText(this, showMetrics ? "Métricas ativadas." : "Métricas ocultadas.", Toast.LENGTH_SHORT).show();
-                    } else if (which == 3) {
+                    } else if (which == 4) {
                         try {
                             startActivity(new Intent(Settings.ACTION_HOME_SETTINGS));
                         } catch (Exception e) {
@@ -707,7 +730,7 @@ public class MainActivity extends AppCompatActivity implements AppAdapter.OnAppC
                             homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(Intent.createChooser(homeIntent, "Selecione o NanoTV e marque 'Sempre'"));
                         }
-                    } else if (which == 4) {
+                    } else if (which == 5) {
                         hiddenPackages.clear();
                         saveSavedState();
                         loadInstalledApps();
@@ -715,6 +738,167 @@ public class MainActivity extends AppCompatActivity implements AppAdapter.OnAppC
                     }
                 })
                 .show();
+    }
+
+    private void showBackgroundThemeDialog() {
+        CharSequence[] themeChoices = new CharSequence[]{
+                "🌌 Aurora Boreal (Teal & Ciano Nórdico)",
+                "🪐 Cosmos Espacial (Índigo & Azul Elétrico)",
+                "🌅 Pôr do Sol (Crepúsculo & Âmbar)",
+                "🌊 Oceano Profundo (Azul Abissal)",
+                "🌲 Esmeralda Minimal (Grafite & Menta)",
+                "🌑 Desativado (Preto Padrão Estático)"
+        };
+
+        new AlertDialog.Builder(this)
+                .setTitle("🎨 Estilo do Fundo Animado")
+                .setItems(themeChoices, (dialog, which) -> {
+                    int selected = (which == 5) ? 0 : (which + 1);
+                    currentBgTheme = selected;
+                    saveSavedState();
+                    applyBackgroundTheme(currentBgTheme);
+                    Toast.makeText(this, "Tema aplicado: " + getBackgroundThemeName(currentBgTheme), Toast.LENGTH_SHORT).show();
+                })
+                .setNegativeButton("Fechar", null)
+                .show();
+    }
+
+    private String getBackgroundThemeName(int theme) {
+        switch (theme) {
+            case 1: return "Aurora Boreal";
+            case 2: return "Cosmos Espacial";
+            case 3: return "Pôr do Sol";
+            case 4: return "Oceano Profundo";
+            case 5: return "Esmeralda Minimal";
+            default: return "Desativado";
+        }
+    }
+
+    private GradientDrawable[] getGradientFrames(int theme) {
+        GradientDrawable[] frames = new GradientDrawable[4];
+        switch (theme) {
+            case 1: // 🌌 Aurora Boreal (Teal, Ciano & Verde Ártico)
+                frames[0] = new GradientDrawable(GradientDrawable.Orientation.TL_BR,
+                        new int[]{Color.parseColor("#0e4b44"), Color.parseColor("#082132"), Color.parseColor("#030a12")});
+                frames[1] = new GradientDrawable(GradientDrawable.Orientation.TR_BL,
+                        new int[]{Color.parseColor("#0b566f"), Color.parseColor("#093439"), Color.parseColor("#030a12")});
+                frames[2] = new GradientDrawable(GradientDrawable.Orientation.BR_TL,
+                        new int[]{Color.parseColor("#105459"), Color.parseColor("#0a2c3a"), Color.parseColor("#030a12")});
+                frames[3] = new GradientDrawable(GradientDrawable.Orientation.BL_TR,
+                        new int[]{Color.parseColor("#0d5e46"), Color.parseColor("#082c38"), Color.parseColor("#030a12")});
+                break;
+
+            case 2: // 🔮 Cyber Cosmos (Índigo, Violeta & Azul Elétrico)
+                frames[0] = new GradientDrawable(GradientDrawable.Orientation.TL_BR,
+                        new int[]{Color.parseColor("#4c1d95"), Color.parseColor("#1e1b4b"), Color.parseColor("#05020a")});
+                frames[1] = new GradientDrawable(GradientDrawable.Orientation.TR_BL,
+                        new int[]{Color.parseColor("#1d4ed8"), Color.parseColor("#2e1065"), Color.parseColor("#05020a")});
+                frames[2] = new GradientDrawable(GradientDrawable.Orientation.BR_TL,
+                        new int[]{Color.parseColor("#701a75"), Color.parseColor("#3b0764"), Color.parseColor("#05020a")});
+                frames[3] = new GradientDrawable(GradientDrawable.Orientation.BL_TR,
+                        new int[]{Color.parseColor("#312e81"), Color.parseColor("#4a044e"), Color.parseColor("#05020a")});
+                break;
+
+            case 3: // 🌅 Pôr do Sol (Crepúsculo, Âmbar & Magenta)
+                frames[0] = new GradientDrawable(GradientDrawable.Orientation.TL_BR,
+                        new int[]{Color.parseColor("#881337"), Color.parseColor("#4c0519"), Color.parseColor("#0d0208")});
+                frames[1] = new GradientDrawable(GradientDrawable.Orientation.TR_BL,
+                        new int[]{Color.parseColor("#9a3412"), Color.parseColor("#5c1d09"), Color.parseColor("#0d0208")});
+                frames[2] = new GradientDrawable(GradientDrawable.Orientation.BR_TL,
+                        new int[]{Color.parseColor("#701a75"), Color.parseColor("#4a044e"), Color.parseColor("#0d0208")});
+                frames[3] = new GradientDrawable(GradientDrawable.Orientation.BL_TR,
+                        new int[]{Color.parseColor("#b45309"), Color.parseColor("#6b21a8"), Color.parseColor("#0d0208")});
+                break;
+
+            case 4: // 🌊 Oceano Profundo (Azul Celeste, Safira & Cobalto)
+                frames[0] = new GradientDrawable(GradientDrawable.Orientation.TL_BR,
+                        new int[]{Color.parseColor("#0284c7"), Color.parseColor("#075985"), Color.parseColor("#020914")});
+                frames[1] = new GradientDrawable(GradientDrawable.Orientation.TR_BL,
+                        new int[]{Color.parseColor("#1e40af"), Color.parseColor("#0c4a6e"), Color.parseColor("#020914")});
+                frames[2] = new GradientDrawable(GradientDrawable.Orientation.BR_TL,
+                        new int[]{Color.parseColor("#0d9488"), Color.parseColor("#0369a1"), Color.parseColor("#020914")});
+                frames[3] = new GradientDrawable(GradientDrawable.Orientation.BL_TR,
+                        new int[]{Color.parseColor("#2563eb"), Color.parseColor("#1e3a8a"), Color.parseColor("#020914")});
+                break;
+
+            case 5: // 🌲 Esmeralda Minimal (Esmeralda, Menta & Jade)
+            default:
+                frames[0] = new GradientDrawable(GradientDrawable.Orientation.TL_BR,
+                        new int[]{Color.parseColor("#047857"), Color.parseColor("#064e3b"), Color.parseColor("#020f09")});
+                frames[1] = new GradientDrawable(GradientDrawable.Orientation.TR_BL,
+                        new int[]{Color.parseColor("#059669"), Color.parseColor("#034a34"), Color.parseColor("#020f09")});
+                frames[2] = new GradientDrawable(GradientDrawable.Orientation.BR_TL,
+                        new int[]{Color.parseColor("#0d9488"), Color.parseColor("#065f46"), Color.parseColor("#020f09")});
+                frames[3] = new GradientDrawable(GradientDrawable.Orientation.BL_TR,
+                        new int[]{Color.parseColor("#10b981"), Color.parseColor("#04432d"), Color.parseColor("#020f09")});
+                break;
+        }
+        return frames;
+    }
+
+    private void applyBackgroundTheme(int theme) {
+        if (gradientRunnable != null) {
+            gradientHandler.removeCallbacks(gradientRunnable);
+            gradientRunnable = null;
+        }
+        if (bgGradientA != null) bgGradientA.animate().cancel();
+        if (bgGradientB != null) bgGradientB.animate().cancel();
+
+        if (theme == 0) {
+            if (bgGradientA != null) bgGradientA.setVisibility(View.GONE);
+            if (bgGradientB != null) bgGradientB.setVisibility(View.GONE);
+            if (rootContainer != null) rootContainer.setBackgroundColor(Color.parseColor("#0F1115"));
+            return;
+        }
+
+        if (rootContainer != null) rootContainer.setBackgroundColor(Color.parseColor("#0F1115"));
+        if (bgGradientA != null) bgGradientA.setVisibility(View.VISIBLE);
+        if (bgGradientB != null) bgGradientB.setVisibility(View.VISIBLE);
+
+        GradientDrawable[] frames = getGradientFrames(theme);
+        gradientStep = 0;
+        isLayerAShowing = true;
+
+        if (bgGradientA != null) {
+            bgGradientA.setBackground(frames[0]);
+            bgGradientA.setAlpha(1.0f);
+        }
+        if (bgGradientB != null) {
+            bgGradientB.setBackground(frames[1]);
+            bgGradientB.setAlpha(0.0f);
+        }
+
+        final int transitionDuration = 4500;
+        final android.view.animation.Interpolator interpolator = new android.view.animation.AccelerateDecelerateInterpolator();
+
+        gradientRunnable = new Runnable() {
+            @Override
+            public void run() {
+                if (currentBgTheme == 0) return;
+                GradientDrawable[] f = getGradientFrames(currentBgTheme);
+                gradientStep = (gradientStep + 1) % f.length;
+                GradientDrawable nextFrame = f[gradientStep];
+
+                if (isLayerAShowing) {
+                    if (bgGradientB != null && bgGradientA != null) {
+                        bgGradientB.setBackground(nextFrame);
+                        bgGradientB.animate().alpha(1.0f).setDuration(transitionDuration).setInterpolator(interpolator).start();
+                        bgGradientA.animate().alpha(0.0f).setDuration(transitionDuration).setInterpolator(interpolator).start();
+                        isLayerAShowing = false;
+                    }
+                } else {
+                    if (bgGradientA != null && bgGradientB != null) {
+                        bgGradientA.setBackground(nextFrame);
+                        bgGradientA.animate().alpha(1.0f).setDuration(transitionDuration).setInterpolator(interpolator).start();
+                        bgGradientB.animate().alpha(0.0f).setDuration(transitionDuration).setInterpolator(interpolator).start();
+                        isLayerAShowing = true;
+                    }
+                }
+
+                gradientHandler.postDelayed(this, transitionDuration);
+            }
+        };
+        gradientHandler.postDelayed(gradientRunnable, transitionDuration);
     }
 
     // ----------------------------------------------------
@@ -1043,6 +1227,9 @@ public class MainActivity extends AppCompatActivity implements AppAdapter.OnAppC
         if (metricsRunnable != null) {
             metricsHandler.post(metricsRunnable);
         }
+        if (currentBgTheme != 0) {
+            applyBackgroundTheme(currentBgTheme);
+        }
     }
 
     @Override
@@ -1050,6 +1237,9 @@ public class MainActivity extends AppCompatActivity implements AppAdapter.OnAppC
         super.onPause();
         if (metricsRunnable != null) {
             metricsHandler.removeCallbacks(metricsRunnable);
+        }
+        if (gradientRunnable != null) {
+            gradientHandler.removeCallbacks(gradientRunnable);
         }
     }
 
@@ -1088,6 +1278,10 @@ public class MainActivity extends AppCompatActivity implements AppAdapter.OnAppC
         if (metricsRunnable != null) {
             metricsHandler.removeCallbacks(metricsRunnable);
         }
+        if (gradientRunnable != null) {
+            gradientHandler.removeCallbacks(gradientRunnable);
+        }
+        gradientHandler.removeCallbacksAndMessages(null);
         executor.shutdown();
     }
 }

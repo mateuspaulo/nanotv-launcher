@@ -32,7 +32,11 @@ timeout /t 3 >nul
 
 echo.
 echo [*] Instalando o NanoTV Launcher...
-if exist "..\releases\NanoTV-Launcher-v1.1.0.apk" (
+if exist "..\releases\NanoTV-Launcher-v1.2.0.apk" (
+    adb -s %TV_IP%:5555 install -r "..\releases\NanoTV-Launcher-v1.2.0.apk"
+) else if exist "releases\NanoTV-Launcher-v1.2.0.apk" (
+    adb -s %TV_IP%:5555 install -r "releases\NanoTV-Launcher-v1.2.0.apk"
+) else if exist "..\releases\NanoTV-Launcher-v1.1.0.apk" (
     adb -s %TV_IP%:5555 install -r "..\releases\NanoTV-Launcher-v1.1.0.apk"
 ) else if exist "releases\NanoTV-Launcher-v1.1.0.apk" (
     adb -s %TV_IP%:5555 install -r "releases\NanoTV-Launcher-v1.1.0.apk"

@@ -1,13 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/root_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_main"
-    android:orientation="vertical"
-    android:paddingStart="28dp"
-    android:paddingTop="16dp"
-    android:paddingEnd="20dp"
-    android:paddingBottom="10dp">
+    android:background="@color/bg_main">
+
+    <!-- Camadas do Fundo Gradiente Animado (GPU Blending) -->
+    <View
+        android:id="@+id/bg_gradient_a"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
+    <View
+        android:id="@+id/bg_gradient_b"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
+    <!-- Conteúdo Principal do Launcher (Exato como HEAD) -->
+    <LinearLayout
+        android:id="@+id/main_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"
+        android:orientation="vertical"
+        android:paddingStart="28dp"
+        android:paddingTop="16dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="10dp">
 
     <!-- Top Header Bar -->
     <LinearLayout
@@ -221,3 +242,4 @@
             android:textSize="11sp" />
     </LinearLayout>
 </LinearLayout>
+</FrameLayout>

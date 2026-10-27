@@ -26,9 +26,10 @@ O **NanoTV Launcher** foi desenvolvido em **Java e Views nativas puras (XML + Re
 
 ---
 
-## ✨ Recursos Principais (Versão 1.1.0)
+## ✨ Recursos Principais (Versão 1.2.0)
 
-* ⚡ **0% de Uso de CPU em Repouso:** A interface é estática e instantânea, liberando os núcleos do processador para os seus filmes e vídeos.
+* 🎨 **Fundo Gradiente Animado Fluido (Aceleração por GPU / 0% CPU):** Transição contínua e suave de iluminação ambiente com 5 temas modernos e rotação orbital em 4 fases (`🌌 Aurora Boreal`, `🪐 Cosmos Espacial`, `🌅 Pôr do Sol`, `🌊 Oceano Profundo`, `🌲 Esmeralda Minimal`) ou opção `🌑 Desativado` (fundo preto fosco original). Configurável diretamente pelo menu de Configurações da TV sem gerar nenhum engasgo ou aumento no uso de CPU.
+* ⚡ **0% de Uso de CPU em Repouso:** A interface é acelerada por hardware de forma ultra-otimizada, liberando os núcleos do processador para os seus filmes e vídeos.
 * 🧠 **Uso Mínimo de RAM (< 20 MB):** Redução de mais de **90%** comparado ao launcher oficial do Google.
 * 🚀 **Otimizador de Memória RAM Integrado no Rodapé:** Badge interativo no rodapé que mostra o consumo em tempo real de **RAM**, **Espaço em Disco** e **CPU**. Ao selecionar o badge com as setas do controle e pressionar **[OK]**, abre o menu de desempenho com a opção de **Liberar Memória RAM** (encerrando processos e serviços não essenciais em segundo plano).
 * ⚡ **Medição Real e Dinâmica de CPU:** Leitura nativa e precisa da frequência do processador (em GHz) e carga do governor via sysfs do kernel Linux, corrigindo a limitação do Android 9 Pie (SELinux) onde ferramentas convencionais ficavam travadas em 0%.
@@ -41,6 +42,18 @@ O **NanoTV Launcher** foi desenvolvido em **Java e Views nativas puras (XML + Re
 * 📱 **Suporte Completo a Apps Sideload:** Exibe todos os aplicativos instalados, inclusive aqueles que o Android TV padrão esconde por não terem banner de TV.
 * 📜 **Barra de Rolagem Proporcional:** Indica com exatidão a quantidade real de apps fora da tela com espaçamento arejado, sem sobrepor os cards.
 * 🚫 **Zero Propagandas e Zero Telemetria:** Nenhuma conexão externa desnecessária.
+
+---
+
+### 🎨 Galeria dos Temas de Fundo Animado
+
+| 🌌 Aurora Boreal | 🪐 Cosmos Espacial | 🌅 Pôr do Sol |
+| :---: | :---: | :---: |
+| ![Aurora Boreal](assets/theme_aurora.png) | ![Cosmos Espacial](assets/theme_cosmos.png) | ![Pôr do Sol](assets/theme_sunset.png) |
+
+| 🌊 Oceano Profundo | ⚙️ Menu de Seleção | 📺 Rolagem Nativa Estável |
+| :---: | :---: | :---: |
+| ![Oceano Profundo](assets/theme_ocean.png) | ![Menu de Temas](assets/theme_menu.png) | ![Visão Geral](assets/preview.png) |
 
 ---
 
@@ -166,9 +179,10 @@ The official stock Google TV launcher and OEM factory skins heavily overload the
 
 ---
 
-## ✨ Key Features (v1.1.0)
+## ✨ Key Features (v1.2.0)
 
-* ⚡ **0% Idle CPU Usage:** Clean, static rendering that frees up processor cores for video decoding and streaming.
+* 🎨 **Fluid Animated Gradient Background (GPU Accelerated / 0% CPU):** Seamless and continuous ambient lighting transitions featuring 5 modern cinematic themes with 4-phase orbital light circulation (`🌌 Northern Lights`, `🪐 Deep Space Cosmos`, `🌅 Sunset Twilight`, `🌊 Abyssal Deep Ocean`, `🌲 Minimal Emerald`) or `🌑 Disabled` (original matte black). Fully configurable directly via the TV Settings menu with zero impact on system responsiveness or CPU usage.
+* ⚡ **0% Idle CPU Usage:** Clean, hardware-accelerated rendering that frees up processor cores for video decoding and streaming.
 * 🧠 **Ultra-Low Memory Footprint (< 20 MB RAM):** Over **90% reduction** compared to the stock Google TV launcher.
 * 🚀 **Interactive RAM Cleaner in Footer:** Dedicated hardware badge in the footer displaying real-time **RAM**, **Free Storage**, and **CPU**. Navigating down to the badge with remote arrow keys and pressing **[OK]** opens the Performance Manager with a 1-click **Free RAM** feature (terminating non-essential background processes).
 * ⚡ **Accurate Dynamic CPU Load & Clock:** Native sysfs kernel monitoring showing real clock speed (in GHz) and dynamic governor load, resolving the Android 9 Pie SELinux restriction where traditional tools showed 0%.
@@ -181,6 +195,18 @@ The official stock Google TV launcher and OEM factory skins heavily overload the
 * 📱 **Full Sideload Support:** Automatically discovers and displays all installed apps, including sideloaded mobile apps hidden by stock Android TV.
 * 📜 **Airy & Proportional Scrollbar:** Shows the exact position of hidden apps with generous padding and sleek design without overlapping app cards.
 * 🚫 **Zero Ads & Zero Telemetry:** Pure local operation with zero background tracking.
+
+---
+
+### 🎨 Animated Background Themes Gallery
+
+| 🌌 Northern Lights | 🪐 Deep Space Cosmos | 🌅 Sunset Twilight |
+| :---: | :---: | :---: |
+| ![Northern Lights](assets/theme_aurora.png) | ![Deep Space Cosmos](assets/theme_cosmos.png) | ![Sunset Twilight](assets/theme_sunset.png) |
+
+| 🌊 Abyssal Deep Ocean | ⚙️ Selection Menu | 📺 Stable Native Grid |
+| :---: | :---: | :---: |
+| ![Abyssal Ocean](assets/theme_ocean.png) | ![Theme Menu](assets/theme_menu.png) | ![Overview](assets/preview.png) |
 
 ---
 
